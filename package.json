@@ -1,0 +1,16 @@
+{
+  "name": "tinyapp",
+  "version": "1.0.0",
+  "description": "A url shortner, make with node and express.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mikael Abehsera",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3"
+  }
+}
