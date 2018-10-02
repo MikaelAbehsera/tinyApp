@@ -4,7 +4,8 @@
   "description": "A url shortner, make with node and express.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "./node_modules/.bin/nodemon -L express_server.js",
+    "test":  "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Mikael Abehsera",
   "license": "MIT",
@@ -12,5 +13,8 @@
     "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
     "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
   }
 }

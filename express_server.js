@@ -24,8 +24,11 @@ function generateRandomString() {
 /*----------------------------------------------------------------------------------------------------*/
 
 let urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "52xVn2": "http://www.lighthouselabs.ca",
+  "9sm5xK": "http://www.google.com",
+  "f3f3f3": "http://www.random.com",
+  "123f42": "http://www.apple.com",
+  "23fr43": "http://www.youtube.com"
 };
 
 /* this is the root (aka /) route and will display hello a message */
@@ -41,9 +44,10 @@ app.get("/urls", (req, res) => {
 });
 
 /* this post will get the input from the /urls/new input form */ 
-app.post("/urls", (req, res) => {
-  console.log(req.body);  // debug statement to see POST parameters
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+app.post("/urls", (req, res) => {   
+  let randomString = generateRandomString();
+  urlDatabase[randomString] = req.body.longURL;
+  res.redirect(`/urls/${randomString}`);
 });
 
 /* This route will have a form to input a url */
@@ -52,11 +56,28 @@ app.get("/urls/new", (req, res) => {
   console.log("/urls/new route has been accessed");
 });
 
+app.get("/u/:shortURL", (req, res) => {
+  let longURL = urlDatabase[req.params.shortURL];
+  console.log(longURL, urlDatabase, req.params.shortURL);
+  res.redirect(longURL);
+});
+
+app.post("/urls/:id/update", (req, res) => {
+  urlDatabase[req.params.id] = req.body.update;
+  console.log(req.params.id);
+  res.redirect("/urls");
+});
+
 app.get("/urls/:id", (req, res) => {
   res.render("urls_show", { shortURL: req.params.id });
   console.log("/urls/:id route has been accessed");
 });
 
+app.post("/urls/:id/delete", (req, res) => {
+  delete urlDatabase[req.params.id];
+  console.log("deleted -->", req.params.id);
+  res.redirect("/urls");
+});
 /* this is the /hello route and will display "hello world"*/
 app.get("/hello", (req, res) => {
   let templateVars = { greeting: "Hello World!"};
@@ -67,6 +88,7 @@ app.get("/hello", (req, res) => {
 /* this will display a not found message for any routes we have not found */
 app.get("/*", (req, res) => {
   res.send("<html><body><h1>PAGE NOT FOUND</h1></body></html>\n");
+  res.statusCode = 404;
   console.log("Page not found");
 });
 
