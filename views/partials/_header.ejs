@@ -20,7 +20,15 @@
       <a class="nav-link" href="/login">Login</a>
     </li>
     <li class="nav-item" style="right: 1%;">
-      <a class="nav-link" href="" style="color: black;">Current User: <%= user %></a>
+      <% let current; if(user === null) { current = "No User Logged in"} else { current = "Current User: "}  %>
+      <a class="nav-link" href="" style="color: black;"><%= current %><%= user %></a>
+    </li>
+    <li style="padding-left: 10px">
+      <form action="/logout" method="POST">
+        <% if(user !== null) { %>
+        <button class="btn btn-warning" >Logout</button>
+        <% } %>
+      </form>
     </li>
   </ul>
 

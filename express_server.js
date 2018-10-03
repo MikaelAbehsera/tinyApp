@@ -53,7 +53,12 @@ app.post("/login", (req, res) => {
   res.redirect("/login");
 });
 
-
+app.post("/logout", (req, res) => {
+  console.log("User logging out!")
+  user = null;
+  res.clearCookie(user);
+  res.redirect("../urls");
+});
 
 /* this is the /urls route and will display urls*/
 app.get("/urls", (req, res) => {
