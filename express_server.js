@@ -3,8 +3,10 @@ const express     = require("express");
 const app         = express();
 const PORT        = 3000;
 const bodyParser  = require("body-parser");
+const cookieParser = require("cookie-parser");
 // SET UP 
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 app.set("view engine", "ejs");
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -41,15 +43,17 @@ app.get("/", (req, res) => {
 
 app.get("/login", (req, res) => {
   res.render("urls_login", {user: user});
-  console.log(user);
 });
 
 app.post("/login", (req, res) => {
   console.log("BEFORE: ", user);
   user = req.body.user;
-  console.log("AFTER: ", user);
+  res.cookie("user", user);
+  console.log("cookie: ", req.cookies.user);
   res.redirect("/login");
 });
+
+
 
 /* this is the /urls route and will display urls*/
 app.get("/urls", (req, res) => {
@@ -82,7 +86,7 @@ app.post("/urls/:id/update", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-  res.render("urls_show", { shortURL: req.params.id });
+  res.render("urls_show", { shortURL: req.params.id, user: user});
   console.log("/urls/:id route has been accessed");
 });
 
