@@ -3,8 +3,10 @@ const express     = require("express");
 const app         = express();
 const PORT        = 3000;
 const bodyParser  = require("body-parser");
+const cookieParser = require("cookie-parser");
 // SET UP 
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 app.set("view engine", "ejs");
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -31,15 +33,36 @@ let urlDatabase = {
   "23fr43": "http://www.youtube.com"
 };
 
+let user = null;
+
 /* this is the root (aka /) route and will display hello a message */
 app.get("/", (req, res) => {
   res.send("Hello! root route is working!");
   console.log("/ route has been accessed");
 });
 
+app.get("/login", (req, res) => {
+  res.render("urls_login", {user: user});
+});
+
+app.post("/login", (req, res) => {
+  console.log("BEFORE: ", user);
+  user = req.body.user;
+  res.cookie("user", user);
+  console.log("cookie: ", req.cookies.user);
+  res.redirect("/login");
+});
+
+app.post("/logout", (req, res) => {
+  console.log("User logging out!")
+  user = null;
+  res.clearCookie(user);
+  res.redirect("../urls");
+});
+
 /* this is the /urls route and will display urls*/
 app.get("/urls", (req, res) => {
-  res.render("urls_index", { urls: urlDatabase });
+  res.render("urls_index", { urls: urlDatabase, user: user });
   console.log("/urls route has been accessed");
 });
 
@@ -52,13 +75,12 @@ app.post("/urls", (req, res) => {
 
 /* This route will have a form to input a url */
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  res.render("urls_new", {user: user});
   console.log("/urls/new route has been accessed");
 });
 
 app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
-  console.log(longURL, urlDatabase, req.params.shortURL);
   res.redirect(longURL);
 });
 
@@ -68,8 +90,9 @@ app.post("/urls/:id/update", (req, res) => {
   res.redirect("/urls");
 });
 
+
 app.get("/urls/:id", (req, res) => {
-  res.render("urls_show", { shortURL: req.params.id });
+  res.render("urls_show", { shortURL: req.params.id, user: user});
   console.log("/urls/:id route has been accessed");
 });
 
