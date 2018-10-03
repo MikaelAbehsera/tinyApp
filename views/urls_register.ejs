@@ -1,0 +1,29 @@
+<% include partials/_header %>
+<div class="rounded" style="background-color:#b2bec3; padding-left: 20px; padding-right: 20px; height: 100%; width: 60%; margin-left: 20%; margin-right: 20%;">
+  <div style="text-align: center;">
+    <a><br><b>Register a New Account</a>
+  </div>
+  <!-- email input -->
+  <form>
+    <div class="input-group" style="padding-top: 30px; padding-bottom: 10px">
+      <div class="input-group-prepend">
+        <button class="btn btn-success" type="button" style="width: 100px">Email</button>
+      </div>
+      <input type="email" name="email" id="email" class="form-control" placeholder="email" aria-label=""
+        aria-describedby="basic-addon1">
+    </div>
+  </form>
+  <!-- password input  -->
+  <form>
+    <div class="input-group" style="padding-top: 10px; padding-bottom: 10px">
+      <div class="input-group-prepend">
+        <button class="btn btn-success" type="button" style="width: 100px">Password</button>
+      </div>
+      <input type="password" name="password" class="form-control" id="password" placeholder="password" aria-label=""
+        aria-describedby="basic-addon1">
+    </div>
+    <div style="padding: 10px;">
+      <button class="btn btn-primary" type="button" style="width: 13%; margin-left: 43.5%; margin-right: 43.5%;">Password</button>
+    </div>
+  </form>
+  <% include partials/_footer %>

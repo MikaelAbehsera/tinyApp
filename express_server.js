@@ -35,10 +35,20 @@ let urlDatabase = {
 
 let user = null;
 
+let users = {};
+
 /* this is the root (aka /) route and will display hello a message */
 app.get("/", (req, res) => {
   res.send("Hello! root route is working!");
   console.log("/ route has been accessed");
+});
+
+app.get("/register", (req, res) => {
+  res.render("urls_register", {user: user, users: users});
+});
+
+app.post("/register", (req, res) => {
+  
 });
 
 app.get("/login", (req, res) => {
