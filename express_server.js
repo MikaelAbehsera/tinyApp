@@ -31,15 +31,29 @@ let urlDatabase = {
   "23fr43": "http://www.youtube.com"
 };
 
+let user = null;
+
 /* this is the root (aka /) route and will display hello a message */
 app.get("/", (req, res) => {
   res.send("Hello! root route is working!");
   console.log("/ route has been accessed");
 });
 
+app.get("/login", (req, res) => {
+  res.render("urls_login", {user: user});
+  console.log(user);
+});
+
+app.post("/login", (req, res) => {
+  console.log("BEFORE: ", user);
+  user = req.body.user;
+  console.log("AFTER: ", user);
+  res.redirect("/login");
+});
+
 /* this is the /urls route and will display urls*/
 app.get("/urls", (req, res) => {
-  res.render("urls_index", { urls: urlDatabase });
+  res.render("urls_index", { urls: urlDatabase, user: user });
   console.log("/urls route has been accessed");
 });
 
@@ -52,13 +66,12 @@ app.post("/urls", (req, res) => {
 
 /* This route will have a form to input a url */
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  res.render("urls_new", {user: user});
   console.log("/urls/new route has been accessed");
 });
 
 app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
-  console.log(longURL, urlDatabase, req.params.shortURL);
   res.redirect(longURL);
 });
 
