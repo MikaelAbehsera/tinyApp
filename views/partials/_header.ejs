@@ -23,7 +23,8 @@
     <% } %>
     <li class="nav-item" style="right: 1%;">
       <% let current; if(currentUser === undefined) { current = "No User Logged in"} else { current = "Current User: " + users[currentUser]["email"] }  %>
-      <a class="nav-link" style="color: black;"> <%= current %> </a>
+      <a class="nav-link" style="color: black;">
+        <%= current %> </a>
     </li>
     <li style="padding-left: 10px">
       <form action="/logout" method="POST">

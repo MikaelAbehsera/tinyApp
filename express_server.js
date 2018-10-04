@@ -28,19 +28,12 @@ function generateRandomId() {
 /*----------------------------------------------------------------------------------------------------*/
 
 let urlDatabase = {
-  "h5w2hr": {
-    "52xVn2": "http://www.lighthouselabs.ca",
-    "9sm5xK": "http://www.google.com"
-  },
-  "123456": {
-    "f3f3f3": "http://www.random.com",
-    "123f42": "http://www.apple.com",
-  },
-  "h24hr2": {
-    "23fr43": "http://www.youtube.com"
-  }
+  "52xVn2": { longURL: "http://www.lighthouselabs.ca", id: "h5w2hr" },
+  "9sm5xK": { longURL: "http://www.google.com", id: "h5w2hr"},
+  "f3f3f3": { longURL: "http://www.random.com", id: "123456"},
+  "123f42": { longURL: "http://www.apple.com", id: "123456"},
+  "23fr43": { longURL: "http://www.youtube.com", id: "h24hr2"}
 };
-
 
 
 const users = {
@@ -123,8 +116,15 @@ app.post("/logout", (req, res) => {
 
 /* this is the /urls route and will display urls*/
 app.get("/urls", (req, res) => {
+  // "52xVn2": { longURL: "http://www.lighthouselabs.ca", id: "h5w2hr" },
+  const currentUrls = {};
+  for(let key in urlDatabase) {
+    if(urlDatabase[key]["id"] === req.cookies["currentUser"]) {
+      currentUrls[key] = urlDatabase[key];
+    }
+  }
   res.render("urls_index", {
-    urls: urlDatabase,
+    urls: currentUrls,
     currentUser: req.cookies["currentUser"],
     users: users
   });
@@ -134,11 +134,9 @@ app.get("/urls", (req, res) => {
 /* this post will get the input from the /urls/new input form */
 app.post("/urls", (req, res) => {
   let randomString = generateRandomId();
-  urlDatabase[randomString] = req.body.longURL;
-  //add url to current users db object
-  let tempUser = req.cookies["currentUser"];
-  urlDatabase[tempUser][randomString] = req.body.longURL;
-  res.redirect(`/urls/${randomString}`);
+  urlDatabase[randomString] = {longURL: req.body.longURL, id: req.cookies["currentUser"]};
+  // res.redirect(`/urls/${randomString}`);
+  res.redirect("/urls");
 });
 
 /* This route will have a form to input a url */
@@ -147,24 +145,22 @@ app.get("/urls/new", (req, res) => {
     res.render("urls_new", {
       currentUser: req.cookies["currentUser"],
       users: users
-    }); 
+    });
     console.log("/urls/new route has been accessed");
   } else {
     res.redirect("/login");
   }
 });
 
-app.get("/u/:shortURL", (req, res) => {
-  let longURL = urlDatabase[req.params.shortURL];
-  res.redirect(longURL);
-});
-
 app.post("/urls/:id/update", (req, res) => {
-  urlDatabase[req.params.id] = req.body.update;
+  urlDatabase[req.params.id]["longURL"] = req.body.update;
   console.log(req.params.id);
   res.redirect("/urls");
 });
 
+app.get("/u/:shortURL", (req, res) => {
+  res.redirect(urlDatabase[req.params.shortURL]["longURL"]);
+});
 
 app.get("/urls/:id", (req, res) => {
   res.render("urls_show", {
