@@ -131,11 +131,15 @@ app.post("/urls", (req, res) => {
 
 /* This route will have a form to input a url */
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new", {
-    currentUser: req.cookies["currentUser"],
-    users: users
-  });
-  console.log("/urls/new route has been accessed");
+  if (req.cookies["currentUser"]) {
+    res.render("urls_new", {
+      currentUser: req.cookies["currentUser"],
+      users: users
+    });
+    console.log("/urls/new route has been accessed");
+  } else {
+    res.redirect("/login");
+  }
 });
 
 app.get("/u/:shortURL", (req, res) => {
