@@ -4,7 +4,7 @@
     <a><br><b>Register a New Account</a>
   </div>
   <!-- email input -->
-  <form>
+  <form  method="POST" action="/register"> 
     <div class="input-group" style="padding-top: 30px; padding-bottom: 10px">
       <div class="input-group-prepend">
         <button class="btn btn-success" type="button" style="width: 100px">Email</button>
@@ -12,9 +12,8 @@
       <input type="email" name="email" id="email" class="form-control" placeholder="email" aria-label=""
         aria-describedby="basic-addon1">
     </div>
-  </form>
+
   <!-- password input  -->
-  <form>
     <div class="input-group" style="padding-top: 10px; padding-bottom: 10px">
       <div class="input-group-prepend">
         <button class="btn btn-success" type="button" style="width: 100px">Password</button>
@@ -23,7 +22,7 @@
         aria-describedby="basic-addon1">
     </div>
     <div style="padding: 10px;">
-      <button class="btn btn-primary" type="button" style="width: 13%; margin-left: 43.5%; margin-right: 43.5%;">Password</button>
+      <button class="btn btn-primary" type="submit" style="width: 13%; margin-left: 43.5%; margin-right: 43.5%;">Submit</button>
     </div>
   </form>
   <% include partials/_footer %>
