@@ -28,12 +28,20 @@ function generateRandomId() {
 /*----------------------------------------------------------------------------------------------------*/
 
 let urlDatabase = {
-  "52xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com",
-  "f3f3f3": "http://www.random.com",
-  "123f42": "http://www.apple.com",
-  "23fr43": "http://www.youtube.com"
+  "h5w2hr": {
+    "52xVn2": "http://www.lighthouselabs.ca",
+    "9sm5xK": "http://www.google.com"
+  },
+  "123456": {
+    "f3f3f3": "http://www.random.com",
+    "123f42": "http://www.apple.com",
+  },
+  "h24hr2": {
+    "23fr43": "http://www.youtube.com"
+  }
 };
+
+
 
 const users = {
   "h5w2hr": {
@@ -73,6 +81,7 @@ app.post("/register", (req, res) => {
     email: req.body.email,
     password: req.body.password
   };
+  urlDatabase[randomId] = {};
   res.cookie("currentUser", users[randomId]["email"]);
   // PASSWORD
   console.log("Email: ", req.body.email);
@@ -101,7 +110,7 @@ app.post("/login", (req, res) => {
   if (currentId === undefined) {
     res.redirect("/register");
   } else {
-    res.cookie("currentUser", users[currentId]["email"]);
+    res.cookie("currentUser", users[currentId]["id"]);
     res.redirect("/urls");
   }
 });
@@ -126,6 +135,9 @@ app.get("/urls", (req, res) => {
 app.post("/urls", (req, res) => {
   let randomString = generateRandomId();
   urlDatabase[randomString] = req.body.longURL;
+  //add url to current users db object
+  let tempUser = req.cookies["currentUser"];
+  urlDatabase[tempUser][randomString] = req.body.longURL;
   res.redirect(`/urls/${randomString}`);
 });
 
@@ -135,7 +147,7 @@ app.get("/urls/new", (req, res) => {
     res.render("urls_new", {
       currentUser: req.cookies["currentUser"],
       users: users
-    });
+    }); 
     console.log("/urls/new route has been accessed");
   } else {
     res.redirect("/login");
