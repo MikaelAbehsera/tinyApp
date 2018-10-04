@@ -35,13 +35,16 @@ let urlDatabase = {
   "23fr43": "http://www.youtube.com"
 };
 
-let currentUser = null;
-
 const users = {
   "h5w2hr": {
     id: "h5w2hr",
     email: "user1@example.com",
     password: "password123"
+  },
+  "123456": {
+    id: "123456",
+    email: "u@e.com",
+    password: "p"
   },
   "h24hr2": {
     id: "h24hr2",
@@ -58,7 +61,7 @@ app.get("/", (req, res) => {
 
 app.get("/register", (req, res) => {
   res.render("urls_register", {
-    currentUser: currentUser,
+    currentUser: req.cookies["currentUser"],
     users: users
   });
 });
@@ -70,40 +73,41 @@ app.post("/register", (req, res) => {
     email: req.body.email,
     password: req.body.password
   };
-  currentUser = users[randomId]["email"];
+  res.cookie("currentUser", users[randomId]["email"]);
   // PASSWORD
+  console.log("Email: ", req.body.email);
   console.log("PASSWORD: ", req.body.password);
   res.redirect("/register");
 });
 
 app.get("/login", (req, res) => {
   res.render("urls_login", {
-    currentUser: currentUser,
+    currentUser: req.cookies["currentUser"],
     users: users
   });
 });
 
 app.post("/login", (req, res) => {
-  // res.cookie("currentUser", currentUser);
   let currentId;
+  //check for user in fake database
   for (let id in users) {
-    if (req.body.user === users[id]["email"]) {
+    if ((req.body.user) === (users[id]["email"]) && (req.body.password) === (users[id]["password"])) {
       currentId = id;
     }
   }
-  console.log(currentId);
+  //if user does not exist in fake database send him to register for an account else 
+  //update cookie
   if (currentId === undefined) {
     res.redirect("/register");
   } else {
-    currentUser = users[currentId]["email"];
-    res.redirect("/login");
+    res.cookie("currentUser", users[currentId]["email"]);
+    res.redirect("/urls");
   }
 });
 
 app.post("/logout", (req, res) => {
   console.log("User logging out!");
-  currentUser = null;
-  res.clearCookie(currentUser);
+  res.clearCookie("currentUser");
   res.redirect("../urls");
 });
 
@@ -111,7 +115,7 @@ app.post("/logout", (req, res) => {
 app.get("/urls", (req, res) => {
   res.render("urls_index", {
     urls: urlDatabase,
-    currentUser: currentUser,
+    currentUser: req.cookies["currentUser"],
     users: users
   });
   console.log("/urls route has been accessed");
@@ -127,7 +131,7 @@ app.post("/urls", (req, res) => {
 /* This route will have a form to input a url */
 app.get("/urls/new", (req, res) => {
   res.render("urls_new", {
-    currentUser: currentUser,
+    currentUser: req.cookies["currentUser"],
     users: users
   });
   console.log("/urls/new route has been accessed");
@@ -148,7 +152,7 @@ app.post("/urls/:id/update", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   res.render("urls_show", {
     shortURL: req.params.id,
-    currentUser: currentUser,
+    currentUser: req.cookies["currentUser"],
     users: users
   });
   console.log("/urls/:id route has been accessed");

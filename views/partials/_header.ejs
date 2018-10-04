@@ -16,28 +16,27 @@
     <li class="nav-item">
       <a class="nav-link" href="/urls/new">Add Url</a>
     </li>
-    <% if(currentUser === null) {  %>
-      <li class="nav-item">
-          <a class="nav-link" href="/login">Login</a>
-      </li>
+    <% if(currentUser === undefined) {  %>
+    <li class="nav-item">
+      <a class="nav-link" href="/login">Login</a>
+    </li>
     <% } %>
     <li class="nav-item" style="right: 1%;">
-      <% let current; if(currentUser === null) { current = "No User Logged in"} else { current = "Current User: "}  %>
-      <a class="nav-link" href="" style="color: black;">
-        <%= current %><%= currentUser %></a>
+      <% let current; if(currentUser === undefined) { current = "No User Logged in"} else { current = "Current User: " + currentUser }  %>
+      <a class="nav-link" style="color: black;"> <%= current %> </a>
     </li>
     <li style="padding-left: 10px">
       <form action="/logout" method="POST">
-        <% if(currentUser !== null) { %>
-        <li class="nav-item">
-        <button class="nav-link btn-warning">Logout</button>
-      </li>
-        <% } else { %>
-          <li class="nav-item">
-              <a class="nav-link btn-primary" href="/register">Register</a>
-            </li>
-        <% } %>
-      </form>
+        <% if(currentUser !== undefined) { %>
+    <li class="nav-item">
+      <button class="nav-link btn-warning">Logout</button>
+    </li>
+    <% } else { %>
+    <li class="nav-item">
+      <a class="nav-link btn-primary" href="/register">Register</a>
+    </li>
+    <% } %>
+    </form>
     </li>
   </ul>
 
