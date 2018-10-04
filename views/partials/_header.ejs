@@ -16,9 +16,11 @@
     <li class="nav-item">
       <a class="nav-link" href="/urls/new">Add Url</a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/login">Login</a>
-    </li>
+    <% if(currentUser === null) {  %>
+      <li class="nav-item">
+          <a class="nav-link" href="/login">Login</a>
+      </li>
+    <% } %>
     <li class="nav-item" style="right: 1%;">
       <% let current; if(currentUser === null) { current = "No User Logged in"} else { current = "Current User: "}  %>
       <a class="nav-link" href="" style="color: black;">

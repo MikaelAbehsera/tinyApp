@@ -38,13 +38,13 @@ let urlDatabase = {
 let currentUser = null;
 
 const users = {
-  "h5w2hr32r4": {
-    id: "h5w2hr32r4",
+  "h5w2hr": {
+    id: "h5w2hr",
     email: "user1@example.com",
     password: "password123"
   },
-  "h24hr22hf4": {
-    id: "h24hr22hf4",
+  "h24hr2": {
+    id: "h24hr2",
     email: "user2@example.com",
     password: "123"
   }
@@ -78,7 +78,8 @@ app.post("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
   res.render("urls_login", {
-    currentUser: currentUser
+    currentUser: currentUser,
+    users: users
   });
 });
 
@@ -86,12 +87,12 @@ app.post("/login", (req, res) => {
   // res.cookie("currentUser", currentUser);
   let currentId;
   for (let id in users) {
-    if(req.body.user === users[id]["email"]) {
+    if (req.body.user === users[id]["email"]) {
       currentId = id;
     }
   }
   console.log(currentId);
-  if(currentId === undefined) {
+  if (currentId === undefined) {
     res.redirect("/register");
   } else {
     currentUser = users[currentId]["email"];
@@ -110,7 +111,8 @@ app.post("/logout", (req, res) => {
 app.get("/urls", (req, res) => {
   res.render("urls_index", {
     urls: urlDatabase,
-    currentUser: currentUser
+    currentUser: currentUser,
+    users: users
   });
   console.log("/urls route has been accessed");
 });
@@ -125,8 +127,8 @@ app.post("/urls", (req, res) => {
 /* This route will have a form to input a url */
 app.get("/urls/new", (req, res) => {
   res.render("urls_new", {
-  currentUser: currentUser
-
+    currentUser: currentUser,
+    users: users
   });
   console.log("/urls/new route has been accessed");
 });
@@ -146,7 +148,8 @@ app.post("/urls/:id/update", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   res.render("urls_show", {
     shortURL: req.params.id,
-    currentUser: currentUser
+    currentUser: currentUser,
+    users: users
   });
   console.log("/urls/:id route has been accessed");
 });
@@ -167,7 +170,7 @@ app.get("/hello", (req, res) => {
 
 /* this will display a not found message for any routes we have not found */
 app.get("/*", (req, res) => {
-  res.send("<html><body><h1>PAGE NOT FOUND</h1></body></html>\n");
+  res.send("<html><body><h1><b>PAGE NOT FOUND</h1></body></html>\n");
   res.statusCode = 404;
   console.log("Page not found");
 });
