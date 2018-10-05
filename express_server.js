@@ -4,6 +4,7 @@ const app = express();
 const PORT = 3000;
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcrypt");
 // SET UP 
 app.use(bodyParser.urlencoded({
   extended: true
@@ -40,17 +41,17 @@ const users = {
   "h5w2hr": {
     id: "h5w2hr",
     email: "user1@example.com",
-    password: "password123"
+    password: bcrypt.hashSync("password123", 10)
   },
   "123456": {
     id: "123456",
     email: "u@e.com",
-    password: "p"
+    password: bcrypt.hashSync("p", 10)
   },
   "h24hr2": {
     id: "h24hr2",
     email: "user2@example.com",
-    password: "123"
+    password: bcrypt.hashSync("123", 10)
   }
 };
 
@@ -65,17 +66,19 @@ app.get("/register", (req, res) => {
     currentUser: req.cookies["currentUser"],
     users: users
   });
+  console.log(req.cookies["currentUser"])
 });
 
 app.post("/register", (req, res) => {
+  const password = req.body.password;
   const randomId = generateRandomId();
   users[randomId] = {
     id: randomId,
     email: req.body.email,
-    password: req.body.password
+    password: bcrypt.hashSync(password, 10)
   };
   urlDatabase[randomId] = {};
-  res.cookie("currentUser", users[randomId]["email"]);
+  res.cookie("currentUser", users[randomId]["id"]);
   // PASSWORD
   console.log("Email: ", req.body.email);
   console.log("PASSWORD: ", req.body.password);
@@ -93,8 +96,9 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) => {
   let currentId;
   //check for user in fake database
-  for (let id in users) {
-    if ((req.body.user) === (users[id]["email"]) && (req.body.password) === (users[id]["password"])) {
+  for (let id in users) {           
+    console.log(bcrypt.compareSync(req.body.password, users[id]["password"]));          
+    if ((req.body.user) === (users[id]["email"]) && bcrypt.compareSync(req.body.password, users[id]["password"])) {
       currentId = id;
     }
   }
@@ -189,7 +193,6 @@ app.get("/hello", (req, res) => {
 app.get("/*", (req, res) => {
   res.send("<html><body><h1><b>PAGE NOT FOUND</h1></body></html>\n");
   res.statusCode = 404;
-  console.log("Page not found");
 });
 
 app.listen(PORT, () => {
