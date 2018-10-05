@@ -34,11 +34,26 @@ function generateRandomId() {
 /*----------------------------------------------------------------------------------------------------*/
 
 let urlDatabase = {
-  "52xVn2": { longURL: "http://www.lighthouselabs.ca", id: "h5w2hr" },
-  "9sm5xK": { longURL: "http://www.google.com", id: "h5w2hr"},
-  "f3f3f3": { longURL: "http://www.random.com", id: "123456"},
-  "123f42": { longURL: "http://www.apple.com", id: "123456"},
-  "23fr43": { longURL: "http://www.youtube.com", id: "h24hr2"}
+  "52xVn2": {
+    longURL: "http://www.lighthouselabs.ca",
+    id: "h5w2hr"
+  },
+  "9sm5xK": {
+    longURL: "http://www.google.com",
+    id: "h5w2hr"
+  },
+  "f3f3f3": {
+    longURL: "http://www.random.com",
+    id: "123456"
+  },
+  "123f42": {
+    longURL: "http://www.apple.com",
+    id: "123456"
+  },
+  "23fr43": {
+    longURL: "http://www.youtube.com",
+    id: "h24hr2"
+  }
 };
 
 
@@ -62,8 +77,11 @@ const users = {
 
 /* this is the root (aka /) route and will display hello a message */
 app.get("/", (req, res) => {
-  res.send("Hello! root route is working!");
-  console.log("/ route has been accessed");
+  if (req.session.currentUser) {
+    res.redirect("/urls");
+  } else {
+    res.redirect("login");
+  }
 });
 
 app.get("/register", (req, res) => {
@@ -71,7 +89,9 @@ app.get("/register", (req, res) => {
     currentUser: req.session.currentUser,
     users: users
   });
-  console.log(req.session.currentUser);
+  if (req.session.currentUser) {
+    res.redirect("/login");
+  }
 });
 
 app.post("/register", (req, res) => {
@@ -101,8 +121,8 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) => {
   let currentId;
   //check for user in fake database
-  for (let id in users) {           
-    console.log(bcrypt.compareSync(req.body.password, users[id]["password"]));          
+  for (let id in users) {
+    console.log(bcrypt.compareSync(req.body.password, users[id]["password"]));
     if ((req.body.user) === (users[id]["email"]) && bcrypt.compareSync(req.body.password, users[id]["password"])) {
       currentId = id;
     }
@@ -125,28 +145,45 @@ app.post("/logout", (req, res) => {
 
 /* this is the /urls route and will display urls*/
 app.get("/urls", (req, res) => {
-  // "52xVn2": { longURL: "http://www.lighthouselabs.ca", id: "h5w2hr" },
-  const currentUrls = {};
-  for(let key in urlDatabase) {
-    if(urlDatabase[key]["id"] === req.session.currentUser) {
-      currentUrls[key] = urlDatabase[key];
+  if (req.session.currentUser) {
+    const currentUrls = {};
+    for (let key in urlDatabase) {
+      if (urlDatabase[key]["id"] === req.session.currentUser) {
+        currentUrls[key] = urlDatabase[key];
+      }
     }
+    res.render("urls_index", {
+      urls: currentUrls,
+      currentUser: req.session.currentUser,
+      users: users
+    });
+  } else {
+    res.status(302).render("statusErrors/302", {
+      currentUser: req.session.currentUser,
+      users: users
+    });
   }
-  res.render("urls_index", {
-    urls: currentUrls,
-    currentUser: req.session.currentUser,
-    users: users
-  });
+
   console.log(req.session.currentUser);
   console.log("/urls route has been accessed");
 });
-
 /* this post will get the input from the /urls/new input form */
 app.post("/urls", (req, res) => {
-  let randomString = generateRandomId();
-  urlDatabase[randomString] = {longURL: req.body.longURL, id: req.session.currentUser};
-  // res.redirect(`/urls/${randomString}`);
-  res.redirect("/urls");
+  const template = {
+    longURL: req.body.longURL,
+    id: req.session.currentUser
+  };
+  if (req.session.currentUser) {
+    let randomString = generateRandomId();
+    urlDatabase[randomString] = {
+      longURL: req.body.longURL,
+      id: req.session.currentUser
+    };
+    res.redirect(`/urls/${randomString}`);
+  } else {
+    res.status(404).render("statusErrors/404", template);
+
+  }
 });
 
 /* This route will have a form to input a url */
@@ -156,43 +193,64 @@ app.get("/urls/new", (req, res) => {
       currentUser: req.session.currentUser,
       users: users
     });
-    console.log("/urls/new route has been accessed");
   } else {
     res.redirect("/login");
   }
 });
 
-app.post("/urls/:id/update", (req, res) => {
+app.post("/urls/:id", (req, res) => {
   urlDatabase[req.params.id]["longURL"] = req.body.update;
-  console.log(req.params.id);
   res.redirect("/urls");
 });
 
-app.get("/u/:shortURL", (req, res) => {
-  res.redirect(urlDatabase[req.params.shortURL]["longURL"]);
-});
-
-app.get("/urls/:id", (req, res) => {
-  res.render("urls_show", {
+app.get("/u/:id", (req, res) => {
+  const template = {
     shortURL: req.params.id,
     currentUser: req.session.currentUser,
     users: users
-  });
-  console.log("/urls/:id route has been accessed");
+  };
+
+  if (urlDatabase[req.params.id]) {
+    res.redirect(urlDatabase[req.params.id]["longURL"]);
+  } else {
+    res.status(404).render("statusErrors/404", template);
+  }
+});
+
+app.get("/urls/:id", (req, res) => {
+  const template = {
+    urlOwnerId: urlDatabase[req.params.id]["id"],
+    shortURL: req.params.id,
+    longURL: urlDatabase[req.params.id]["longURL"],
+    currentUser: req.session.currentUser,
+    users: users
+  };
+  if (urlDatabase[req.params.id] && req.session.currentUser === urlDatabase[req.params.id]["id"]) {
+    res.render("urls_show", template);
+  } else if (!req.session.currentUser) {
+    //if user is not logged in 
+    res.status(403).render("statusErrors/403", template);
+  } else if (req.session.currentUser !== req.params.id["id"]) {
+    //if user does not own this url 
+    res.status(403).render("statusErrors/403", template);
+  } else {
+    res.status(404).render("statusErrors/404", template);
+  }
 });
 
 app.post("/urls/:id/delete", (req, res) => {
   delete urlDatabase[req.params.id];
-  console.log("deleted -->", req.params.id);
   res.redirect("/urls");
 });
 /* this is the /hello route and will display "hello world"*/
 app.get("/hello", (req, res) => {
   let templateVars = {
-    greeting: "Hello World!"
+    greeting: "Hello World!",
+    shortURL: req.params.id,
+    currentUser: req.session.currentUser,
+    users: users
   };
   res.render("hello_world", templateVars);
-  console.log("/hello route has been accessed");
 });
 
 /* this will display a not found message for any routes we have not found */

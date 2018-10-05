@@ -10,12 +10,14 @@
 
 <body style="font-size:20px;">
   <ul class="nav nav-tabs">
+    <% if(currentUser !== undefined) {  %>
     <li class="nav-item">
       <a class="nav-link" href="/urls">Urls</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="/urls/new">Add Url</a>
     </li>
+    <% } %>
     <% if(currentUser === undefined) {  %>
     <li class="nav-item">
       <a class="nav-link" href="/login">Login</a>

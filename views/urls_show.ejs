@@ -1,14 +1,11 @@
 <% include partials/_header %>
-<title>TinyApp</title>
-</head>
 
 <body>
     <!-- Add your EJS code here -->
     <div class="rounded" style="background-color:#b2bec3; padding-left: 20px; padding-right: 20px; height: 100%; width: 50%; margin-left: 25%; margin-right: 25%;">
-        <h4>ShortURL:
-            <%= shortURL %>
-        </h4>
-        <form method="POST" action="/urls/<%= shortURL %>/update">
+        <h4>ShortURL: <%= shortURL %></h4>
+        <h4>longURL: <%= longURL %></h4>
+        <form method="POST" action="/urls/<%= shortURL %>">
             <div class="input-group" style="padding-bottom: 20px;">
                 <input id="update" type="text" name="update" class="form-control" placeholder="updated url" aria-label="" aria-describedby="basic-addon1">
                 <div class="input-group-append">
