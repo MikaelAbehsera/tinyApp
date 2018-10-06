@@ -1,17 +1,37 @@
 <% include partials/_header %>
 
-<body>
-    <!-- Add your EJS code here -->
-    <div class="rounded" style="background-color:#b2bec3; padding-left: 20px; padding-right: 20px; height: 100%; width: 50%; margin-left: 25%; margin-right: 25%;">
-        <h4>ShortURL: <%= shortURL %></h4>
-        <h4>longURL: <%= longURL %></h4>
-        <form method="POST" action="/urls/<%= shortURL %>">
-            <div class="input-group" style="padding-bottom: 20px;">
-                <input id="update" type="text" name="update" class="form-control" placeholder="updated url" aria-label="" aria-describedby="basic-addon1">
-                <div class="input-group-append">
-                    <button class="btn btn-success" type="submit">Update</button>
-                </div>
-            </div>
-        </form>
+<div id="card-show" class="card text-white bg-primary mb-3 d-inline-block">
+    <div id="show-div" class="card-header">
+        <div>
+            <a> ShortURL: http://localhost:3000/u/<%= shortURL %> </a>
+        </div>
+        <div>
+            <a> longURL: <%= longURL %> </a>
+        </div>
+        <div> 
+            <a id="dc-show"> Date Created: <%= currentDate %> </a>
+        </div>
+        <div>
+            <% if(!used) { %>
+                <a id="used-show"> Visted: 0 Times. </a>
+            <% } else { %>
+                <a id="used-show"> Visted: <%= used %> Times. </a>
+            <% } %>
+        </div>
+        <div>
+            <a id="used-show"> Unique Visits: <%= viewed %> Times. </a>
+        </div>
     </div>
+
+    <form method="POST" action="/urls/<%= shortURL %>">
+        <div class="input-group" style="padding-bottom: 20px;">
+            <input id="update" type="text" name="update" class="form-control" placeholder="updated url" aria-label=""
+                aria-describedby="basic-addon1">
+            <div class="input-group-append">
+                <button class="btn btn-success" type="submit">Update</button>
+            </div>
+        </div>
+    </form>
+</div>
+
 <% include partials/_footer %>

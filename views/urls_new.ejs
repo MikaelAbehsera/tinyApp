@@ -1,11 +1,14 @@
 <% include partials/_header %>
 
 <form action="/urls" method="POST" style="margin:150px;">
-  <div style="position: absolute; width: 40%; top: 20%; left: 30%;">
-    <label for="longURL">Enter a URL:</label>
-    <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
+<div class="input-group input-group-lg">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="inputGroup-sizing-lg">Enter a URL:</span>
+    </div>
+    <input id="longURL" type="text" name="longURL" placeholder="Please add http://" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
     <input class="btn btn-primary" type="submit" value="Submit">
   </div>
 </form>
 
+<div id="background-add">Add Urls</div>
 <% include partials/_footer %>

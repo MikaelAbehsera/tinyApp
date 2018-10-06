@@ -1,28 +1,33 @@
 <% include partials/_header %>
-<div class="rounded" style="background-color:#b2bec3; padding-left: 20px; padding-right: 20px; height: 100%; width: 60%; margin-left: 20%; margin-right: 20%;">
-  <div style="text-align: center;">
-    <a><br><b>Register a New Account</a>
-  </div>
+
+<div id="div-title-login-register">
+  <h1 id="register" >Register a New Account</h1>
+</div>
+
+<form method="POST" action="/register">
   <!-- email input -->
-  <form  method="POST" action="/register"> 
-    <div class="input-group" style="padding-top: 30px; padding-bottom: 10px">
-      <div class="input-group-prepend">
-        <button class="btn btn-success" type="button" style="width: 100px">Email</button>
-      </div>
-      <input type="email" name="email" id="email" class="form-control" placeholder="email" aria-label=""
-        aria-describedby="basic-addon1">
+  <div id="email-input" class="input-group" >
+    <div id="" class="input-group-prepend">
+      <button id="button-email-password" class="btn btn-success" type="button" >Email</button>
     </div>
+    <input id="" type="email" name="email" id="email" class="form-control"  aria-label="" aria-describedby="basic-addon1">
+  </div>
 
   <!-- password input  -->
-    <div class="input-group" style="padding-top: 10px; padding-bottom: 10px">
-      <div class="input-group-prepend">
-        <button class="btn btn-success" type="button" style="width: 100px">Password</button>
-      </div>
-      <input type="password" name="password" class="form-control" id="password" placeholder="password" aria-label=""
-        aria-describedby="basic-addon1">
+  <div id="password-input" class="input-group">
+    <div  class="input-group-prepend">
+      <button id="button-email-password" class="btn btn-success" type="button" >Password</button>
     </div>
-    <div style="padding: 10px;">
-      <button class="btn btn-primary" type="submit" style="width: 13%; margin-left: 43.5%; margin-right: 43.5%;">Submit</button>
-    </div>
-  </form>
-  <% include partials/_footer %>
+    <input id="" type="password" name="password" class="form-control" id="password"  aria-label=""
+      aria-describedby="basic-addon1">
+  </div>
+
+  <!-- submit button  -->
+  <div class="input-group-append">
+    <button id="submit" class="btn btn-primary" type="submit" >Submit</button>
+  </div>
+</form>
+<div id="background-register">
+    Register
+  </div>
+<% include partials/_footer %>

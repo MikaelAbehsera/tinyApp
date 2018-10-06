@@ -1,0 +1,49 @@
+#rounded {
+  align-content: center;
+}
+
+#card {
+  margin-left: 10%;
+  margin-right: 10%;
+  font-size: 1.5vw;
+  color: #BFD5E2;
+  width: 80%;
+}
+#delete-button {
+  width: 10%;
+  position: absolute;
+  top: 57%;
+  right: 16%;
+  float: right;
+}
+#view-button {
+  width: 10%;
+  position: absolute;
+  top: 57%;
+  right: 5%;
+  float: right;
+}
+
+#background-urls {
+  vertical-align: text-top;
+  position: absolute;
+  margin-left: 16%; 
+  top: -14%;
+  width: auto;
+  height: auto;
+  opacity: 0.1;
+  font-size: 40vw;
+  z-index: -1;
+}
+
+#dc {
+  padding-left: 10px; 
+  float: right;
+  color: black;
+  font-size: 1vw;
+}
+
+#used {
+  float: right;
+  font-size: 1vw;
+}

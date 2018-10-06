@@ -1,16 +1,22 @@
 <% include partials/_header %>
-<form action="/login" method="POST">
-  <h1 id="login" style="text-align: center; font-size: 5vw;" >Login</h1>
-  <div class="input-group" style="position: absolute; width: 40%; top: 20%; left: 30%;">
+<div id="div-title-login-register">
+  <a id="login">Login</a>  
+</div>
+
+<form action="/login" method="POST">  
+  <div id="email-input" class="input-group" >
     <input type="email" id="user" name="user" class="form-control" autocomplete="off" placeholder="Email" aria-label=""
       aria-describedby="basic-addon1">
   </div>
-  <div class="input-group" style="position: absolute; width: 40%; top: 30%; left: 30%;">
+  <div id="password-input" class="input-group">
     <input type="password" id="password" name="password" class="form-control" autocomplete="off" placeholder="password"
       aria-label="" aria-describedby="basic-addon1">
   </div>
-  <div class="input-group-append">
-    <button class="btn btn-success" type="submit" style="position: absolute; width: 20%; margin-left: 40%; margin-right: 40%; top: 40%;">Login</button>
+  <div id="login-button" class="input-group-append">
+    <button id="submit" class="btn btn-success" type="submit" >Login</button>
   </div>
 </form>
+<div id="background-login">
+  Login
+</div>
 <% include partials/_footer %>

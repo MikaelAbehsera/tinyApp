@@ -1,0 +1,15 @@
+#card-show {
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 80%;
+  height: 60%;
+}
+
+#show-div {
+  position: relative;
+  width: 100%;
+}
+
+#update {
+  width: 50%;
+}

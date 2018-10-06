@@ -1,0 +1,21 @@
+@import url(urls_new.css);
+@import url(urls_show.css);
+@import url(urls_login_register.css);
+@import url(urls_index.css);
+@import url(hello_world.css);
+@import url(status.css);
+/* importing all other css files */
+
+html {
+  position: absolute;
+  top: 0%;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  position: absolute;
+  top: 0%;
+  height: 100%;
+  width: 100%;
+}

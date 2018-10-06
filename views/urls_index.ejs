@@ -1,27 +1,38 @@
 <% include partials/_header %>
-    <div class="rounded" style="background-color:#b2bec3; padding-left: 20px; padding-right: 20px; height: 100%; width: 60%; margin-left: 20%; margin-right: 20%;">
-      <!-- Add your EJS code here -->
-      <% if(currentUser !== null || currentUser !== undefined) { %>
-      <% for(key in urls) { %>
-        <div style="display: flex; justify-content: space-between; align-items: center; width: auto; padding-bottom: 15px; padding-top: 15px; font-family: 'Courier New', Courier, monospace;">
-          <a>  
-            <%= key %> --->
-          </a>
-          <div>
-            <a class="btn btn-link" style="position: relative; width:fit-content"  href="<%= urls[key]['longURL'] %>">
-              <%= urls[key]["longURL"] %>
-            </a>
-            </div>
-          <div>
-            <form style="position: inherit" method="POST" action="/urls/<%= key %>/delete">
-              <button class="btn btn-danger" style="vertical-align: middle;">  Delete 🗑️  </button>
-            </form>
-            <form action="/urls/<%= key %>">
-                <button class="btn btn-primary" style="vertical-align: middle;" >  View/Edit  </button>
-            </form>
-          </div>
-        </div>
-      <% } %>
-      <% } %>
+<div id="rounded" class="rounded">
+  <!-- Add your EJS code here -->
+
+  <% if(currentUser !== null || currentUser !== undefined) { %>
+  <% for(key in urls) { %>
+  <div id="card" class="card text-white bg-primary mb-3 d-inline-block">
+    <div id="shorturl-div" class="card-header">
+      ShortURL: http://localhost:3000/u/<%= key %>
+      <a id="dc">Date Created:
+        <%= urls[key]["date"] %>
+      </a>
+      <a id="used">Visted:
+        <%= urls[key]["used"] %> Times.
+      </a> 
+      <a id="used">Unique Visits:
+          <%= Object.keys(urls[key]["users"]).length %> Times.
+      </a> 
+      <form style="position: inherit" method="POST" action="/urls/<%= key %>/delete">
+        <button id="delete-button" class="btn btn-danger"> Delete 🗑️ </button>
+      </form>
+      <form action="/urls/<%= key %>">
+        <button id="view-button" class="btn btn-success"> View/Edit </button>
+      </form>
     </div>
+    <div class="card-body">
+      <h4 class="card-title" href="<%= urls[key]['longURL'] %>">
+        <%= urls[key]["longURL"] %>
+      </h4>
+    </div>
+  </div>
+  <% } %>
+  <% } %>
+</div>
+<div id="background-urls">
+  Urls
+</div>
 <% include partials/_footer %>

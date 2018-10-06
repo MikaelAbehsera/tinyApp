@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 const cookieSession = require("cookie-session");
 // SET UP 
-app.use(express.static("/"));
+app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -37,23 +37,38 @@ function generateRandomId() {
 let urlDatabase = {
   "52xVn2": {
     longURL: "http://www.lighthouselabs.ca",
-    id: "h5w2hr"
+    id: "h5w2hr",
+    date: "03/2012/20:50:28",
+    used: 0,
+    users: {}
   },
   "9sm5xK": {
     longURL: "http://www.google.com",
-    id: "h5w2hr"
+    id: "h5w2hr",
+    date: "05/2015/11:50:28",
+    used: 0,
+    users: {}
   },
   "f3f3f3": {
     longURL: "http://www.random.com",
-    id: "123456"
+    id: "123456",
+    date: "010/2016/13:50:28",
+    used: 0,
+    users: {}
   },
   "123f42": {
     longURL: "http://www.apple.com",
-    id: "123456"
+    id: "123456",
+    date: "06/2018/14:50:28",
+    used: 0,
+    users: {}
   },
   "23fr43": {
     longURL: "http://www.youtube.com",
-    id: "h24hr2"
+    id: "h24hr2",
+    date: "06/2018/14:30:28",
+    used: 0,
+    users: {}
   }
 };
 
@@ -83,6 +98,7 @@ app.get("/", (req, res) => {
   } else {
     res.redirect("login");
   }
+
 });
 
 app.get("/register", (req, res) => {
@@ -100,7 +116,7 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  if(req.body.password === "" || req.body.email === "") {
+  if (req.body.password === "" || req.body.email === "") {
     res.status(400).render("statusErrors/400", {
       currentUser: req.session.currentUser,
       users: users
@@ -119,7 +135,7 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  if(req.session.currentUser) {
+  if (req.session.currentUser) {
     res.redirect("/urls");
   } else {
     res.render("urls_login", {
@@ -131,9 +147,7 @@ app.get("/login", (req, res) => {
 
 
 app.post("/login", (req, res) => {
-  console.log(req.body.password);
-  console.log(req.body.email);
-  if(req.body.password === "" ) {
+  if (req.body.password === "") {
     res.status(400).render("statusErrors/400", {
       currentUser: req.session.currentUser,
       users: users
@@ -174,7 +188,8 @@ app.get("/urls", (req, res) => {
     res.render("urls_index", {
       urls: currentUrls,
       currentUser: req.session.currentUser,
-      users: users
+      users: users,
+      urlDatabase: urlDatabase
     });
   } else {
     res.status(302).render("statusErrors/302", {
@@ -185,15 +200,21 @@ app.get("/urls", (req, res) => {
 });
 /* this post will get the input from the /urls/new input form */
 app.post("/urls", (req, res) => {
+  var datetime = Date();
+  const date = String(datetime).split("").splice(8, 16).join("").replace(/\s/g, "/");
   const template = {
     longURL: req.body.longURL,
-    id: req.session.currentUser
+    id: req.session.currentUser,
+    date: date,
+    users: {}
   };
   if (req.session.currentUser) {
     let randomString = generateRandomId();
     urlDatabase[randomString] = {
       longURL: req.body.longURL,
-      id: req.session.currentUser
+      id: req.session.currentUser,
+      date: date,
+      users: {}
     };
     res.redirect(`/urls/${randomString}`);
   } else {
@@ -225,7 +246,7 @@ app.post("/urls/:id", (req, res) => {
   if (urlDatabase[req.params.id] && req.session.currentUser === urlDatabase[req.params.id]["id"] && req.body.update !== undefined) {
     urlDatabase[req.params.id]["longURL"] = req.body.update;
     res.redirect("/urls");
-  } else if(req.session.currentUser && req.session.currentUser !== urlDatabase[req.params.id]["id"]) {
+  } else if (req.session.currentUser && req.session.currentUser !== urlDatabase[req.params.id]["id"]) {
     res.status(403).render("statusErrors/403", template);
   } else {
     res.redirect("/urls");
@@ -241,6 +262,16 @@ app.get("/u/:id", (req, res) => {
 
   if (urlDatabase[req.params.id]) {
     res.redirect(urlDatabase[req.params.id]["longURL"]);
+    // count how many times it way used 
+    if (urlDatabase[req.params.id]["used"]) {
+      urlDatabase[req.params.id]["used"]++;
+    } else {
+      urlDatabase[req.params.id]["used"] = 1;
+    }
+    //add a loop
+    if (req.session.currentUser) {
+      urlDatabase[req.params.id]["users"][req.session.currentUser] = true;
+    }
   } else {
     res.status(404).render("statusErrors/404", template);
   }
@@ -248,11 +279,14 @@ app.get("/u/:id", (req, res) => {
 
 app.get("/urls/:id", (req, res) => {
   const template = {
+    currentDate: urlDatabase[req.params.id]["date"],
     urlOwnerId: urlDatabase[req.params.id]["id"],
     shortURL: req.params.id,
     longURL: urlDatabase[req.params.id]["longURL"],
     currentUser: req.session.currentUser,
-    users: users
+    used: urlDatabase[req.params.id]["used"],
+    users: users,
+    viewed: Object.keys(urlDatabase[req.params.id]["users"]).length
   };
   if (urlDatabase[req.params.id] && req.session.currentUser === urlDatabase[req.params.id]["id"]) {
     res.render("urls_show", template);

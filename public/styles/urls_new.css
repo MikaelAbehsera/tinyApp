@@ -1,0 +1,22 @@
+#background-add {
+  vertical-align: text-top;
+  position: absolute;
+  margin-left: 9%; 
+  top: -0%;
+  width: auto;
+  height: auto;
+  opacity: 0.1;
+  font-size: 23vw;
+  z-index: -1;
+}
+
+#longURL {
+  width: 300px
+}
+
+#newid {
+  position: absolute;
+  width: 40%;
+  top: 20%; 
+  left: 30%;
+}
