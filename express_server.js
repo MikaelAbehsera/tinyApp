@@ -221,11 +221,13 @@ app.post("/urls/:id", (req, res) => {
     currentUser: req.session.currentUser,
     users: users
   };
-  if (urlDatabase[req.params.id] && req.session.currentUser === urlDatabase[req.params.id]["id"]) {
+  if (urlDatabase[req.params.id] && req.session.currentUser === urlDatabase[req.params.id]["id"] && req.body.update !== undefined) {
     urlDatabase[req.params.id]["longURL"] = req.body.update;
     res.redirect("/urls");
   } else if(req.session.currentUser && req.session.currentUser !== urlDatabase[req.params.id]["id"]) {
     res.status(403).render("statusErrors/403", template);
+  } else {
+    res.redirect("/urls");
   }
 });
 
