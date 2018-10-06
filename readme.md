@@ -4,4 +4,7 @@ Tiny app is a link shortner, a user can input a long, hard to type link, and the
 
 ## What Tiny app looks like
 
-![]()
+![login page]()
+![register page]()
+![add a new url, /url/new page]()
+

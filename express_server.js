@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 const cookieSession = require("cookie-session");
 // SET UP 
+app.use(express.static("/"));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
