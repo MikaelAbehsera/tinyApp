@@ -85,16 +85,26 @@ app.get("/", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  res.render("urls_register", {
-    currentUser: req.session.currentUser,
-    users: users
-  });
   if (req.session.currentUser) {
-    res.redirect("/login");
+    res.redirect("/urls");
+  } else {
+    res.render("urls_register", {
+      currentUser: req.session.currentUser,
+      users: users
+    });
+    if (req.session.currentUser) {
+      res.redirect("/login");
+    }
   }
 });
 
 app.post("/register", (req, res) => {
+  if(req.body.password === "" || req.body.email === "") {
+    res.status(400).render("statusErrors/400", {
+      currentUser: req.session.currentUser,
+      users: users
+    });
+  }
   const password = req.body.password;
   const randomId = generateRandomId();
   users[randomId] = {
@@ -104,41 +114,49 @@ app.post("/register", (req, res) => {
   };
   urlDatabase[randomId] = {};
   req.session.currentUser = users[randomId]["id"];
-  // PASSWORD
-  console.log("Email: ", req.body.email);
-  console.log("PASSWORD: ", req.body.password);
   res.redirect("/register");
 });
 
 app.get("/login", (req, res) => {
-  res.render("urls_login", {
-    currentUser: req.session.currentUser,
-    users: users
-  });
+  if(req.session.currentUser) {
+    res.redirect("/urls");
+  } else {
+    res.render("urls_login", {
+      currentUser: req.session.currentUser,
+      users: users
+    });
+  }
 });
 
 
 app.post("/login", (req, res) => {
-  let currentId;
-  //check for user in fake database
-  for (let id in users) {
-    console.log(bcrypt.compareSync(req.body.password, users[id]["password"]));
-    if ((req.body.user) === (users[id]["email"]) && bcrypt.compareSync(req.body.password, users[id]["password"])) {
-      currentId = id;
-    }
-  }
-  //if user does not exist in fake database send him to register for an account else 
-  //update cookie
-  if (currentId === undefined) {
-    res.redirect("/register");
+  console.log(req.body.password);
+  console.log(req.body.email);
+  if(req.body.password === "" ) {
+    res.status(400).render("statusErrors/400", {
+      currentUser: req.session.currentUser,
+      users: users
+    });
   } else {
-    req.session.currentUser = users[currentId]["id"];
-    res.redirect("/urls");
+    let currentId;
+    //check for user in fake database
+    for (let id in users) {
+      if ((req.body.user) === (users[id]["email"]) && bcrypt.compareSync(req.body.password, users[id]["password"])) {
+        currentId = id;
+      }
+    }
+    //if user does not exist in fake database send him to register for an account insted of giving him a status message
+    //update cookie 
+    if (currentId === undefined) {
+      res.redirect("/register");
+    } else {
+      req.session.currentUser = users[currentId]["id"];
+      res.redirect("/urls");
+    }
   }
 });
 
 app.post("/logout", (req, res) => {
-  console.log("User logging out!");
   req.session = null;
   res.redirect("../urls");
 });
@@ -163,9 +181,6 @@ app.get("/urls", (req, res) => {
       users: users
     });
   }
-
-  console.log(req.session.currentUser);
-  console.log("/urls route has been accessed");
 });
 /* this post will get the input from the /urls/new input form */
 app.post("/urls", (req, res) => {
@@ -199,8 +214,19 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.post("/urls/:id", (req, res) => {
-  urlDatabase[req.params.id]["longURL"] = req.body.update;
-  res.redirect("/urls");
+  const template = {
+    urlOwnerId: urlDatabase[req.params.id]["id"],
+    shortURL: req.params.id,
+    longURL: urlDatabase[req.params.id]["longURL"],
+    currentUser: req.session.currentUser,
+    users: users
+  };
+  if (urlDatabase[req.params.id] && req.session.currentUser === urlDatabase[req.params.id]["id"]) {
+    urlDatabase[req.params.id]["longURL"] = req.body.update;
+    res.redirect("/urls");
+  } else if(req.session.currentUser && req.session.currentUser !== urlDatabase[req.params.id]["id"]) {
+    res.status(403).render("statusErrors/403", template);
+  }
 });
 
 app.get("/u/:id", (req, res) => {
@@ -255,7 +281,12 @@ app.get("/hello", (req, res) => {
 
 /* this will display a not found message for any routes we have not found */
 app.get("/*", (req, res) => {
-  res.send("<html><body><h1><b>PAGE NOT FOUND</h1></body></html>\n");
+  const template = {
+    shortURL: req.params.id,
+    currentUser: req.session.currentUser,
+    users: users
+  };
+  res.status(404).render("statusErrors/404", template);
   res.statusCode = 404;
 });
 
