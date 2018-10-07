@@ -39,3 +39,7 @@ Tiny app is a link shortner, a user can input a long, hard to type link, and the
 # Extra features 
 
 - urls now will indicate date created, how many times the short url has been accesed, and how many unique users(for logged in users only)
+
+# Things to note
+
+- since the site is not currently hosted on a short domain, the short url will consist of http://localhost:3000 + short link
