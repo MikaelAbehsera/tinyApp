@@ -158,7 +158,7 @@ app.get("/login", (req, res) => {
 
 
 app.post("/login", (req, res) => {
-  if (req.body.password === "" || req.body.email === undefined) {
+  if (req.body.password === "" || req.body.email === "") {
     res.status(400).render("statusErrors/400", {
       currentUser: req.session.currentUser,
       users: users
