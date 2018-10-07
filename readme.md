@@ -4,10 +4,15 @@ Tiny app is a link shortner, a user can input a long, hard to type link, and the
 
 ## What Tiny app looks like
 
+- The login page
 ![login page](https://github.com/MikaelAbehsera/tinyApp/blob/master/docs/Screen%20Shot%202018-10-06%20at%204.02.44%20PM.png)
+- The page where users can register
 ![register page](https://github.com/MikaelAbehsera/tinyApp/blob/master/docs/Screen%20Shot%202018-10-06%20at%204.02.38%20PM.png)
+- Page where users can view their urls
 ![/urls page, view page for urls](https://github.com/MikaelAbehsera/tinyApp/blob/master/docs/Screen%20Shot%202018-10-06%20at%204.03.39%20PM.png)
+- Page where users can add urls
 ![add a new url, /url/new page](https://github.com/MikaelAbehsera/tinyApp/blob/master/docs/Screen%20Shot%202018-10-06%20at%204.02.32%20PM.png)
+- Page where users can view a specific url and edit it
 ![Edit a url + info](https://github.com/MikaelAbehsera/tinyApp/blob/master/docs/Screen%20Shot%202018-10-06%20at%205.25.01%20PM.png)
 
 # Dependencies used in this project
