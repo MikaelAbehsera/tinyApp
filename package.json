@@ -1,6 +1,9 @@
 {
   "name": "tinyapp",
   "version": "1.0.0",
+  "engine": { 
+    "node": "10.10.0"
+  },
   "description": "A url shortner, make with node and express.",
   "main": "app.js",
   "scripts": {
