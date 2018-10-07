@@ -132,6 +132,7 @@ app.post("/register", (req, res) => {
       users: users
     });
   }
+  console.log(req.body.email);
   const password = req.body.password;
   const randomId = generateRandomId();
   users[randomId] = {

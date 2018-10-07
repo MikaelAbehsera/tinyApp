@@ -1,2 +1,8 @@
 /* add stuff */
 
+#message {
+  position: absolute;
+  top: 30%;
+  font-size: 3vw;
+  text-align: center;
+}
