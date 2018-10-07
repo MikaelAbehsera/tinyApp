@@ -7,15 +7,14 @@
   <div id="card" class="card text-white bg-primary mb-3 d-inline-block">
     <div id="shorturl-div" class="card-header">
       ShortURL: http://localhost:3000/u/<%= key %>
-      <a id="dc">Date Created:
+      <a id="dc">-  Date Created:
         <%= urls[key]["date"] %>
       </a>
-      <a id="used">Visted:
-        <%= urls[key]["used"] %> Times.
-      </a> 
-      <a id="used">Unique Visits:
-          <%= Object.keys(urls[key]["users"]).length %> Times.
-      </a> 
+      <a id="used">-  Visted:
+        <%= urls[key]["used"] %> Times.  - </a>
+      <a id="used"> Unique Visits:
+        <%= Object.keys(urls[key]["users"]).length %> Times.  -   
+      </a>
       <form style="position: inherit" method="POST" action="/urls/<%= key %>/delete">
         <button id="delete-button" class="btn btn-danger"> Delete 🗑️ </button>
       </form>

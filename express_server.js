@@ -19,10 +19,18 @@ app.use(cookieSession({
 app.set("view engine", "ejs");
 
 /*----------------------------------------------------------------------------------------------------*/
+/**
+ * Function will give a random number between 2 numbers
+ * @param {*} min min number to return 
+ * @param {*} max max number to return 
+ */
 function random(min, max) {
   return Math.floor(Math.random() * max) + min;
 }
 
+/**
+ * Function will return a randomized 6 character string
+ */
 function generateRandomId() {
   const alphaNum = "abcdefghigklmnopqrstuvwxyz1234567890";
   let str = "";
@@ -33,7 +41,7 @@ function generateRandomId() {
 }
 
 /*----------------------------------------------------------------------------------------------------*/
-
+// Sample database for all urls this is where all urls will be stored for now.
 let urlDatabase = {
   "52xVn2": {
     longURL: "http://www.lighthouselabs.ca",
@@ -72,7 +80,7 @@ let urlDatabase = {
   }
 };
 
-
+//sample database for users this is were all users will be stored for now.
 const users = {
   "h5w2hr": {
     id: "h5w2hr",
@@ -91,7 +99,6 @@ const users = {
   }
 };
 
-/* this is the root (aka /) route and will display hello a message */
 app.get("/", (req, res) => {
   if (req.session.currentUser) {
     res.redirect("/urls");
@@ -100,6 +107,7 @@ app.get("/", (req, res) => {
   }
 
 });
+
 
 app.get("/register", (req, res) => {
   if (req.session.currentUser) {
@@ -116,6 +124,7 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
+  //checking if email or password are empty when submitted
   if (req.body.password === "" || req.body.email === "") {
     res.status(400).render("statusErrors/400", {
       currentUser: req.session.currentUser,
@@ -147,7 +156,7 @@ app.get("/login", (req, res) => {
 
 
 app.post("/login", (req, res) => {
-  if (req.body.password === "") {
+  if (req.body.password === "" || req.body.email === undefined) {
     res.status(400).render("statusErrors/400", {
       currentUser: req.session.currentUser,
       users: users
@@ -210,16 +219,10 @@ app.post("/urls", (req, res) => {
   };
   if (req.session.currentUser) {
     let randomString = generateRandomId();
-    urlDatabase[randomString] = {
-      longURL: req.body.longURL,
-      id: req.session.currentUser,
-      date: date,
-      users: {}
-    };
+    urlDatabase[randomString] = template;
     res.redirect(`/urls/${randomString}`);
   } else {
     res.status(404).render("statusErrors/404", template);
-
   }
 });
 
@@ -243,6 +246,7 @@ app.post("/urls/:id", (req, res) => {
     currentUser: req.session.currentUser,
     users: users
   };
+  //checking authentication 
   if (urlDatabase[req.params.id] && req.session.currentUser === urlDatabase[req.params.id]["id"] && req.body.update !== undefined) {
     urlDatabase[req.params.id]["longURL"] = req.body.update;
     res.redirect("/urls");
@@ -288,6 +292,7 @@ app.get("/urls/:id", (req, res) => {
     users: users,
     viewed: Object.keys(urlDatabase[req.params.id]["users"]).length
   };
+  //checking authentication 
   if (urlDatabase[req.params.id] && req.session.currentUser === urlDatabase[req.params.id]["id"]) {
     res.render("urls_show", template);
   } else if (!req.session.currentUser) {

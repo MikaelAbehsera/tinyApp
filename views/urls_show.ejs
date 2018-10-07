@@ -12,7 +12,7 @@
             <a id="dc-show"> Date Created: <%= currentDate %> </a>
         </div>
         <div>
-            <% if(!used) { %>
+            <% if(!used || used === 0) { %>
                 <a id="used-show"> Visted: 0 Times. </a>
             <% } else { %>
                 <a id="used-show"> Visted: <%= used %> Times. </a>
