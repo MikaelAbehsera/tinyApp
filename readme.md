@@ -4,9 +4,11 @@ Tiny app is a link shortner, a user can input a long, hard to type link, and the
 
 ## What Tiny app looks like
 
-![login page]()
-![register page]()
-![add a new url, /url/new page]()
+![login page](https://github.com/MikaelAbehsera/tinyApp/blob/master/docs/Screen%20Shot%202018-10-06%20at%204.02.44%20PM.png)
+![register page](https://github.com/MikaelAbehsera/tinyApp/blob/master/docs/Screen%20Shot%202018-10-06%20at%204.02.38%20PM.png)
+![/urls page, view page for urls](https://github.com/MikaelAbehsera/tinyApp/blob/master/docs/Screen%20Shot%202018-10-06%20at%204.03.39%20PM.png)
+![add a new url, /url/new page](https://github.com/MikaelAbehsera/tinyApp/blob/master/docs/Screen%20Shot%202018-10-06%20at%204.02.32%20PM.png)
+![Edit a url + info](https://github.com/MikaelAbehsera/tinyApp/blob/master/docs/Screen%20Shot%202018-10-06%20at%205.25.01%20PM.png)
 
 # Dependencies used in this project
 - Node.js
