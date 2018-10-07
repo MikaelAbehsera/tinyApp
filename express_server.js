@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(cookieSession({
   name: "session",
+  // encription keys
   keys: ["one", "two", "three"],
 }));
 app.set("view engine", "ejs");
@@ -321,7 +322,6 @@ app.get("/hello", (req, res) => {
   res.render("hello_world", templateVars);
 });
 
-/* this will display a not found message for any routes we have not found */
 app.get("/*", (req, res) => {
   const template = {
     shortURL: req.params.id,
